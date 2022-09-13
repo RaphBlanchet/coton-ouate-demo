@@ -1,28 +1,14 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {useQuery} from 'react-query';
 import styled from 'styled-components/native';
+import useIndice from '../../hooks/useIndice';
 import fetch_weather from '../../repositories/open-weather-api/queries/fetch-weather';
+import {Footer, Header} from '../Components';
 
 const ScreenContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-`;
-
-const HeaderContainer = styled.View`
-  padding: 8px 0;
-  align-items: center;
-`;
-
-const Title = styled.Text`
-  font-size: 32px;
-  font-weight: 700;
-  color: white;
-`;
-
-const Subtitle = styled.Text`
-  font-size: 18px;
-  color: white;
 `;
 
 const LoadingIndicator = styled.ActivityIndicator`
@@ -35,9 +21,9 @@ const Container = styled.View`
   justify-content: center;
 `;
 
-const Temperature = styled.Text`
+const Indice = styled.Text`
   font-weight: 900;
-  font-size: 72px;
+  font-size: 128px;
   color: white;
 `;
 
@@ -49,22 +35,19 @@ const HomeScreen: React.FC = () => {
     fetch_weather(lat, long),
   );
 
-  const temperature = useMemo(
-    () => (data ? Math.round(data?.data.main.temp) : undefined),
-    [data],
-  );
+  const indice = useIndice(data?.data);
 
   return (
     <ScreenContainer>
-      <HeaderContainer>
-        <Title>Fais-tu frette?</Title>
-        <Subtitle>T'es-tu ben dans ton coton ouaté?</Subtitle>
-        {isLoading && <LoadingIndicator />}
-      </HeaderContainer>
+      <Header />
+      {isLoading && <LoadingIndicator />}
       {data && (
-        <Container>
-          <Temperature>{temperature}°C</Temperature>
-        </Container>
+        <>
+          <Container>
+            <Indice>{indice}</Indice>
+          </Container>
+          <Footer data={data.data} />
+        </>
       )}
     </ScreenContainer>
   );

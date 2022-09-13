@@ -1,18 +1,18 @@
 import API from '../api';
 
-type WeatherResponse = {
+export type WeatherData = {
   main: {
     temp: number;
     feels_like: number;
     humidity: number;
   };
-  rain: {
+  rain?: {
     '1h': number;
   };
 };
 
 export default function fetch_weather(lat: string, lon: string) {
-  return API.get<WeatherResponse>('/weather', {
+  return API.get<WeatherData>('/weather', {
     params: {lat, lon},
   });
 }
