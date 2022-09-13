@@ -9,6 +9,7 @@ export type WeatherData = {
   rain?: {
     '1h': number;
   };
+  name: string;
 };
 
 export default function fetch_weather(lat: string, lon: string) {

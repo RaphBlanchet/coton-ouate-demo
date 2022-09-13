@@ -1,27 +1,30 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import Icon from './Icon';
 
 const HeaderContainer = styled.View`
+  flex-direction: row;
   padding: 8px 0;
+  justify-content: center;
   align-items: center;
 `;
 
-const Title = styled.Text`
-  font-size: 32px;
+const City = styled.Text`
   font-weight: 700;
+  font-size: 22px;
   color: white;
+  margin-left: 8px;
 `;
 
-const Subtitle = styled.Text`
-  font-size: 18px;
-  color: white;
-`;
+type HeaderProps = {
+  city: string;
+};
 
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({city}) => {
   return (
     <HeaderContainer>
-      <Title>Fais-tu frette?</Title>
-      <Subtitle>T'es-tu ben dans ton coton ouaté?</Subtitle>
+      <Icon name="location_pin" size={18} tintColor="white" />
+      <City>{city}</City>
     </HeaderContainer>
   );
 };

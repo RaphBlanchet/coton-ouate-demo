@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
 
 import {QueryClient, QueryClientProvider} from 'react-query';
-import HomeScreen from './UI/Screens/HomeScreen';
+import RootNavigator from './navigators/RootNavigator';
 
 const queryClient = new QueryClient();
 
@@ -16,7 +16,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <SafeAreaView style={backgroundStyle}>
         <StatusBar barStyle="light-content" />
-        <HomeScreen />
+        <RootNavigator />
       </SafeAreaView>
     </QueryClientProvider>
   );

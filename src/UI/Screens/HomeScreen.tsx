@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useQuery} from 'react-query';
 import styled from 'styled-components/native';
 import useIndice from '../../hooks/useIndice';
@@ -36,19 +36,21 @@ const HomeScreen: React.FC = () => {
   );
 
   const indice = useIndice(data?.data);
+  const cityName = useMemo(() => data?.data.name ?? '', [data]);
 
   return (
     <ScreenContainer>
-      <Header />
-      {isLoading && <LoadingIndicator />}
-      {data && (
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : data ? (
         <>
+          <Header city={cityName} />
           <Container>
             <Indice>{indice}</Indice>
           </Container>
           <Footer data={data.data} />
         </>
-      )}
+      ) : null}
     </ScreenContainer>
   );
 };
