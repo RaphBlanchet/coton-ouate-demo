@@ -1,9 +1,17 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
+import {check, RESULTS} from 'react-native-permissions';
 import {useQuery} from 'react-query';
 import styled from 'styled-components/native';
+import {LocationPermission} from '../../Const';
 import useIndice from '../../hooks/useIndice';
 import fetch_weather from '../../repositories/open-weather-api/queries/fetch-weather';
 import {Footer, Header} from '../Components';
+import Geolocation from 'react-native-geolocation-service';
+
+type Location = {
+  lat: string;
+  lon: string;
+};
 
 const ScreenContainer = styled.View`
   flex: 1;
@@ -27,20 +35,45 @@ const Indice = styled.Text`
   color: white;
 `;
 
+const DEFAULT_LOCATION = {
+  lat: '48.7961337',
+  lon: '-67.5527661',
+};
+
 const HomeScreen: React.FC = () => {
-  // MATANE
-  const lat = '48.7961337';
-  const long = '-67.5527661';
-  const {data, isLoading} = useQuery(['weather', lat, long], () =>
-    fetch_weather(lat, long),
+  const [location, setLocation] = useState<Location | null>();
+
+  useEffect(() => {
+    async function fetchLocation() {
+      const permission = await check(LocationPermission);
+      if (permission === RESULTS.GRANTED || permission === RESULTS.LIMITED) {
+        Geolocation.getCurrentPosition(position => {
+          setLocation({
+            lat: String(position.coords.latitude),
+            lon: String(position.coords.longitude),
+          });
+        });
+      } else {
+        setLocation(DEFAULT_LOCATION);
+      }
+    }
+    fetchLocation();
+  }, []);
+
+  const {data, isLoading} = useQuery(
+    ['weather', location?.lat, location?.lon],
+    () => fetch_weather(location!.lat, location!.lon),
+    {enabled: !!location},
   );
+
+  const dataLoading = isLoading || !location;
 
   const indice = useIndice(data?.data);
   const cityName = useMemo(() => data?.data.name ?? '', [data]);
 
   return (
     <ScreenContainer>
-      {isLoading ? (
+      {dataLoading ? (
         <LoadingIndicator />
       ) : data ? (
         <>

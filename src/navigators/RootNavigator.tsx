@@ -1,6 +1,8 @@
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
+import {request} from 'react-native-permissions';
+import {LocationPermission} from '../Const';
 import HomeScreen from '../UI/Screens/HomeScreen';
 import SplashScreen from '../UI/Screens/SplashScreen';
 
@@ -14,7 +16,10 @@ const theme = {
 export default function RootNavigator() {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    setTimeout(() => setReady(true), 2000);
+    setTimeout(async () => {
+      await request(LocationPermission);
+      setReady(true);
+    }, 2000);
   }, []);
 
   return (
