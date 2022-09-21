@@ -9,3 +9,7 @@ Pour compiler et exécuter le projet :
   2. Copier le fichier `.env.local.template` en le renomant `.env.local` et y inscrire votre clé d'API
   3. ...
   4. Profit!
+
+### Slides
+
+https://drive.google.com/file/d/1UCuYIW0LqItLJrmMcv-NYyxyqIRWv27C/view?usp=sharing
